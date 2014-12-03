@@ -18,6 +18,43 @@ Since each robot's sensors are a little bit different, you need to fully charact
 
 
 __Prelab__  
-To begin the lab I decided to include information from this lab I thought will be useful in creating my program. 
+To begin the lab I decided to include information from this lab I thought will be useful in creating my program. I started with the software part of it. I thought of the following pseudocode for the required functionality:
 
+    if (leftWall <= CLOSE_PROXIMITY) {
+      P1OUT |= BIT0;
+    } else {
+      P1OUT &= ~BIT0;
+    }
+      
+    if (rightWall <= CLOSE_PROXIMITY) {
+      P1OUT |= BIT6;
+    } else {
+      P1OUT &= ~BIT0;
+    }
+
+The variables, `leftWall` and `rightWall`, will be constantly updated by the sensors. This is where I transitioned into testing the sensors to see if they worked. I used a DMM to measure the voltages at certain distances:
+
+|DISTANCE|VOLTAGE|
+|:--|:__:|
+|||
+|||
+|||
+|||
+|||
+|||
+|||
+
+Then I considered how I would set up the ADC10 subsystem (Analog-to-digital Conversion) :
+
+      1. ADC10ON and interrup enable
+      2. Select input channel to be A4, according to device specific data
+      3. Enable A4 for analog input
+      4. Select ADC10 clock - probably SMCLK
+      5. Set the output direction for the LED1
+      6. Set the Output direction for LED2
+      7. Make a while loop that includes:
+        a.Sampling and conversion
+        b. ISR force exit
+
+After that, I included inside the main loop the pseudocode from above that turned on the lights. 
 
