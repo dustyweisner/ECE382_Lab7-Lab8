@@ -34,15 +34,63 @@ To begin the lab I decided to include information from this lab I thought will b
 
 The variables, `leftWall` and `rightWall`, will be constantly updated by the sensors. This is where I transitioned into testing the sensors to see if they worked. I used a DMM to measure the voltages at certain distances:
 
-|DISTANCE|VOLTAGE|
-|:--|:__:|
-|||
-|||
-|||
-|||
-|||
-|||
-|||
+*CENTER IR SENSOR* 
+
+|DISTANCE (inches)|VOLTAGE (V)|
+|:----|:-----:|
+|no wall|<.6|
+|12|.6|
+|10|.65|
+|8.25|.7|
+|7|.8|
+|6|.95|
+|5|1.2|
+|4|1.35|
+|3|1.875|
+|2|2.869|
+|1|4.52|
+|Touching|4.80|
+
+*LEFT IR SENSOR*
+
+|DISTANCE (inches)|VOLTAGE (V)|
+|:----|:-----:|
+|no wall|<.22|
+|13|.258|
+|12|.259|
+|11|.266|
+|10|.284|
+|9|.293|
+|8|.316|
+|7|.330|
+|6|.374|
+|5|.439|
+|4|.520|
+|3|.647|
+|2|.951|
+|1|1.485|
+|Touching|1.778|
+
+*RIGHT IR SENSOR*
+
+|DISTANCE (inches)|VOLTAGE (V)|
+|:----|:-----:|
+|no wall|<.6|
+|13|.6|
+|12|.616|
+|11|.625|
+|10|.65|
+|9|.680|
+|8|.720|
+|7|.769|
+|6|.860|
+|5|.981|
+|4|1.21|
+|3|1.59|
+|2|2.28|
+|1|3.22|
+|Touching|4.35|
+
 
 Then I considered how I would set up the ADC10 subsystem (Analog-to-digital Conversion) :
 
