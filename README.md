@@ -126,3 +126,46 @@ Pseudocode of how to make the robot go through the maze:
         //      stop
         //      90 degree turn right
         // if frontwall is less than threshold
+
+FIRST ATTEMPT:
+
+    	if (rightValue() <= RIGHT_MIN && rightValue() >= RIGHT_MAX && frontValue() < FRONT_MAX) {
+    			moveForward();
+    		} else if (frontValue() >= FRONT_MAX) {
+    			stopMovingForward();
+    			if (rightValue() < RIGHT_MIN) {
+    				moveLeft();
+    			} else {
+    				moveRight();
+    				moveForward();
+    				_delay_cycles(10000);
+    			}
+    		} else if (frontValue() < FRONT_MAX)  {
+    			if(rightValue() >= RIGHT_MIN ) {
+    				stopMovingForward();
+    //				moveSmallLeft();
+    				moveLeft();
+    				moveForward();
+    				_delay_cycles(1000);
+    				stopMovingForward();
+    //				moveSmallRight();
+    				moveRight();
+    				moveForward();
+    				_delay_cycles(1000);
+    				stopMovingForward();
+    			} else if (rightValue() <= RIGHT_MAX) {
+    				stopMovingForward();
+    //				moveSmallRight();
+    				moveRight();
+    				moveForward();
+    				_delay_cycles(1000);
+    				stopMovingForward();
+    //				moveSmallLeft();
+    				moveLeft();
+    				moveForward();
+    				_delay_cycles(1000);
+    				stopMovingForward();
+    			}
+    		}
+
+The robot stutters back and forth, runs into the wall, and when it gets past the left wall, it sprints.
