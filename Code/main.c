@@ -12,11 +12,6 @@ void initMSP430();
 //----------------------------------------------------------------------
 int main(void) {
 
-	unsigned short sample[16];									// Just to analyze the values
-	unsigned short sample2[16];
-	unsigned char i = 0;										// index into sample array
-	unsigned char j = 0;
-
 	IFG1=0; 													// clear interrupt flag1
 	WDTCTL = WDTPW + WDTHOLD;									// disable WDT
 
