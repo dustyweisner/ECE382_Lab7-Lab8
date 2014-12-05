@@ -106,3 +106,23 @@ Then I considered how I would set up the ADC10 subsystem (Analog-to-digital Conv
 
 After that, I included inside the main loop the pseudocode from above that turned on the lights. 
 
+__*Lab 7 "Robot Maze"*__
+
+Pseudocode of how to make the robot go through the maze:
+
+        // if leftWall is less than threshold,
+        //      stop
+        //      turn quarter right
+        //      moveforward
+        // if rightWall is less than threshold,
+        //      stop
+        //      turn quarter left
+        //      moveForward
+        // if rightWall is greater than moveZone
+        //      stop
+        //      turn right
+        //      move forward
+        // if frontwall is less than threshold 
+        //      stop
+        //      90 degree turn right
+        // if frontwall is less than threshold
