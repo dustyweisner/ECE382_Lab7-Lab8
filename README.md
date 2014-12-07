@@ -106,9 +106,24 @@ Then I considered how I would set up the ADC10 subsystem (Analog-to-digital Conv
 
 After that, I included inside the main loop the pseudocode from above that turned on the lights. 
 
-__*Lab 7 "Robot Maze"*__
+__*Lab 8 "Robot Maze"*__
 
-Pseudocode of how to make the robot go through the maze:
+INSTRUCTIONS  
+You must write a program that autonomously navigates your robot through a maze (Figure 1) while meeting the following requirements:
+
+1. Your robot must always start at the home position.
+2. Your robot is considered successful only if it finds one of the three exits and moves partially out of the maze. A large portion of your grade depends on which door you exit.
+    Door 1 - Required Functionality
+    Door 2 - B Functionality
+    Door 3 - A Functionality
+3.You cannot hit a wall!
+4. Bonus! Navigate from the A door back to the entrance using the same algorithm.
+5. You cannot hit a wall!
+6. Your robot must solve the maze in less than three minutes.
+7. Your robot will be stopped if it touches the wall more than twice.
+8. Your robot must use the IR sensors to find its path through the maze.
+
+Pseudocode of how to make the robot go through the maze FOR A FUNCTIONALITY:
 
         // if leftWall is less than threshold,
         //      stop
@@ -168,4 +183,63 @@ FIRST ATTEMPT:
     			}
     		}
 
-The robot stutters back and forth, runs into the wall, and when it gets past the left wall, it sprints.
+The robot stutters back and forth, runs into the wall, and when it gets past the left wall, it sprints. After little corrections and more coding for dubugging, I changed my coding using a different pseudocode:
+
+        /* move forward if right wall is within range else stop and....
+         * if right wall is too far away
+         * 		stop
+         * 		move small right
+         * 		move forward
+         * 		move small left
+         * if right wall is too close
+         * 		stop
+         * 		move small left
+         * 		moveforward()
+         * 		delay 1000
+         * 		move small right
+         * if left wall is too close
+         * 		stop
+         * 		move small right
+         * 		moveforward
+         * 		delay 1000
+         * 		move small left
+         * if front wall is too close
+         * 		stop
+         * 		turn right
+         *
+         */
+
+The code for this also did not work. My robot kept twirling around in circles, and I could not correct the code for functionality. When I corrected the IR reciever threshold distances, I finally got the robot to move forward and correct itself if it was too close to the wall. So then the problem was that it kept going slow and then when it went past the wall on the left, it would sprint, slamming into the wall ahead of it. Then I kept fiddling with the speed and coding, and it didn't make much of a difference and actually forward hit a wall and turned completely around to hit another wall and so on. I decided to make an even newer pseudocode, which is the code I ended with for A/Bonus functionality. The following code is what I ended up with:
+
+        if(frontValue() < FRONT_MAX) {
+        	if (rightValue() <= RIGHT_MIN && rightValue() >= RIGHT_MAX) {
+        		moveForward();
+        		_delay_cycles(10000);
+        		stopMovingForward();
+        		_delay_cycles(10000);
+        	} else if (rightValue() <= RIGHT_MIN) {
+        		autocorrectRight();
+        	} else if (rightValue() > RIGHT_MIN) {
+        		autocorrectLeft();
+        	}
+        } else if(frontValue() >= FRONT_MAX) {
+        	while(frontValue() >= FRONT_MAX) {
+        		moveSmallLeft();
+        		stopMovingForward();
+        		_delay_cycles(10000);
+        	}
+        	moveForward();
+        	_delay_cycles(10000);
+        }
+    
+The autocorrects were just to keep the right wall within a certain minimum and maximum voltage threshold for the robot to follow the rightmost wall to get to the A door. Because this code worked, I will give an explanation of what it does.
+
+Explanation of Code with Maze  
+The code first looks for if there is a wall ahead of it. Because there was not one at the beginning, it then looked for a wall to the right. I placed it within a range, so it moved only forward. However, my robot doesn't perfectly move straight. So to compensate, my autocorrects would put the robot back on track. The robot would continue until the first wall. When the wall was in front of the front sensor, the robot would turn left until the front sensor didn't sense anymore. Then the robot would move forward for a little, then continue on its program. The robot then moved forward, sensing the right wall, and the robot continued until there was no right wall. When there was no right wall, the robot autocorrected right because it wasn't within the threshold range. It autocorrected all the way around the corner of the wall, where it picked up the wall to the right and got back into the threshold range. It continued until it saw the wall in front of it and took a left turn until the front sensors didn't pick it up anymore and continued on its way forward right out the A functionality door. Then, using the exact same algorithm, I put it back through the maze backwards. It made it through and earned Bonus functionality.
+
+Some difficulties occured trying to get the correct threshold values to get the maze only to sense certain distances. All I did was give about 4 inches of a threshold value range. The range was not always accurate so I had to move the inner value farther from the wall, but I had to keep the outer value large enough so that the voltage picked up from noise would not screw up the readings and make a false sensing and thus motor control. The correct voltage was used for the front wall from the start. I picked a low enough value that would not interfere if the robot suddenly turned left too far. I did not have to worry about the left wall because given the other code, the robot should always make its way right back to the right wall. The left sensor would come handy if the walls were closer together or if the maze was bigger.
+
+Documentation: NONE
+
+This concludes LAB 7, LAB 8, and ECE 382 Labs.
+
