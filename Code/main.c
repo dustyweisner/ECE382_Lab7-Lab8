@@ -1,11 +1,10 @@
 //-----------------------------------------------------------------
-// Name:	Coulston
-// File:	lab7.c
-// Date:	Fall 2014
-// Purp:	Collect analog samples from P1.3 and P1.4
+// Name:	Dustin Weisner
+// File:	lab7_lab8.c
+// Date:	2 DEC 2014
+// Purp:	Make a robot go through a maze
 //-----------------------------------------------------------------
 #include "msp430g2553.h"
-
 #include "main.h"
 
 void initMSP430();
@@ -52,19 +51,9 @@ int main(void) {
 				stopMovingForward();
 				_delay_cycles(10000);
 			} else if (rightValue() <= RIGHT_MIN) {
-				stopMovingForward();
-				moveSmallRight();
-				moveForward();
-				_delay_cycles(100000);
-				stopMovingForward();
-				_delay_cycles(100000);
+				autocorrectRight();
 			} else if (rightValue() > RIGHT_MIN) {
-				stopMovingForward();
-				moveSmallLeft();
-				moveForward();
-				_delay_cycles(10000);
-				stopMovingForward();
-				_delay_cycles(100000);
+				autocorrectLeft();
 			}
 		} else if(frontValue() >= FRONT_MAX) {
 			while(frontValue() >= FRONT_MAX) {
@@ -76,40 +65,6 @@ int main(void) {
 			_delay_cycles(10000);
 
 		}
-
-
-//
-//		if (rightValue() <= RIGHT_MIN && rightValue() >= RIGHT_MAX && frontValue() < FRONT_MAX) {
-//			moveForward();
-//			_delay_cycles(10000);
-//			stopMovingForward();
-//			_delay_cycles(100);
-//
-//		} else if (frontValue() >= FRONT_MAX) {
-//			stopMovingForward();
-//			if (rightValue() < RIGHT_MIN) {
-//				moveLeft();
-//				moveForward();
-//				_delay_cycles(1000000);
-//				stopMovingForward();
-//			} else {
-//				moveRight();
-//				moveForward();
-//				_delay_cycles(1000000);
-//				stopMovingForward();
-//			}
-//		} else if (frontValue() < FRONT_MAX)  {
-//			if(rightValue() >= RIGHT_MIN ) {
-//				autocorrectLeft();
-//			} else if (rightValue() <= RIGHT_MAX) {
-//				autocorrectRight();
-//			}
-//		}
-//		if (rightValue() > 0x0210) {
-//						moveSmallLeft();
-//					} else {
-//						moveSmallRight();
-//					}
 
 		/* move forward if right wall is within range else stop and....
 		 * if right wall is too far away
@@ -136,10 +91,7 @@ int main(void) {
 		 */
 
 
-//		if (rightValue() > 0x0210) {
-//			moveForward();
-//			_delay_cycles(10000);
-//		}
+//	Required Functionality Lab 7
 //				if (leftValue() > 0x0200) {
 //					P1DIR |= BIT0;
 //					P1OUT &= ~BIT6;
@@ -167,188 +119,3 @@ int main(void) {
 	} // end infinite loop
 
 } // end main
-
-int rightValue() {
-	ADC10CTL0 = 0;											// Turn off ADC subsystem
-	ADC10CTL1 = INCH_4 | ADC10DIV_3 ;						// Channel 4, ADC10CLK/4
-	ADC10AE0 = BIT4;		 								// Make P1.4 analog input
-	ADC10CTL0 = SREF_0 | ADC10SHT_3 | ADC10ON | ENC;		// Vcc & Vss as reference
-
-
-	ADC10CTL0 |= ADC10SC;									// Start a conversion
-	while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
-	return ADC10MEM;
-}
-
-int leftValue() {
-	ADC10CTL0 = 0;											// Turn off ADC subsystem
-	ADC10CTL1 = INCH_3 | ADC10DIV_3;						// Channel 4, ADC10CLK/4
-	ADC10AE0 = BIT3;		 								// Make P1.4 analog input
-	ADC10CTL0 = SREF_0 | ADC10SHT_3 | ADC10ON | ENC;		// Vcc & Vss as reference
-
-
-	ADC10CTL0 |= ADC10SC;									// Start a conversion
-	while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
-	return ADC10MEM;
-}
-
-int frontValue() {
-	ADC10CTL0 = 0;											// Turn off ADC subsystem
-	ADC10CTL1 = INCH_2 | ADC10DIV_3;						// Channel 4, ADC10CLK/4
-	ADC10AE0 = BIT2;		 								// Make P1.4 analog input
-	ADC10CTL0 = SREF_0 | ADC10SHT_3 | ADC10ON | ENC;		// Vcc & Vss as reference
-
-
-	ADC10CTL0 |= ADC10SC;									// Start a conversion
-	while(ADC10CTL1 & ADC10BUSY);							// Wait for conversion to complete
-	return ADC10MEM;
-}
-
-void stopMovingBackward(void) {
-		P2DIR |= BIT1;
-		P2OUT |= BIT1;
-		P2DIR |= BIT5;
-		P2OUT |= BIT5;
-		TA1CCR1 = 0;
-		TA1CCR2 = 0;
-		TA1CCTL1 = OUTMOD_5;
-		TA1CCTL2 = OUTMOD_5;
-}
-
-void stopMovingForward(void) {
-		P2DIR |= BIT0;
-		P2OUT |= BIT0;
-		P2DIR |= BIT3;
-		P2OUT |= BIT3;
-		TA1CCR1 = 0;
-		TA1CCR2 = 0;
-		TA1CCTL1 = OUTMOD_5;
-		TA1CCTL2 = OUTMOD_5;
-}
-
-void moveForward(void) {
-    	P2DIR |= BIT0;
-		P2OUT &= ~BIT0;
-		P2DIR |= BIT3;
-		P2OUT &= ~BIT3;
-		TA1CCR1 = 20;
-		TA1CCR2 = 80;
-		TA1CCTL1 = OUTMOD_5;
-		TA1CCTL2 = OUTMOD_7;
-
-}
-
-void moveBackward() {
-	P2DIR |= BIT1;
-	P2OUT &= ~BIT1;
-	P2DIR |= BIT5;
-	P2OUT &= ~BIT5;
-	TA1CCR1 = 50;
-	TA1CCR2 = 50;
-	TA1CCTL1 = OUTMOD_7;
-	TA1CCTL2 = OUTMOD_5;
-}
-
-void moveSmallRight() {
-	P2DIR |= BIT0;
-	P2OUT &= ~BIT0;
-	P2DIR |= BIT3;
-	P2OUT |= BIT3;
-	TA1CCR1 = 50;
-	TA1CCR2 = 50;
-	TA1CCTL1 = OUTMOD_7;
-	TA1CCTL2 = OUTMOD_5;
-	_delay_cycles(250000);
-	P2DIR |= BIT0;
-	P2OUT |= BIT0;
-	P2DIR |= BIT3;
-	P2OUT |= BIT3;
-	TA1CCR1 = 0;
-	TA1CCR2 = 0;
-	TA1CCTL1 = OUTMOD_5;
-	TA1CCTL2 = OUTMOD_5;
-
-}
-
-void moveSmallLeft() {
-	P2DIR |= BIT0;
-	P2OUT |= BIT0;
-	P2DIR |= BIT3;
-	P2OUT &= ~BIT3;
-	TA1CCR1 = 50;
-	TA1CCR2 = 50;
-	TA1CCTL1 = OUTMOD_5;
-	TA1CCTL2 = OUTMOD_7;
-	_delay_cycles(250000);
-	P2DIR |= BIT0;
-	P2OUT |= BIT0;
-	P2DIR |= BIT3;
-	P2OUT |= BIT3;
-	TA1CCR1 = 0;
-	TA1CCR2 = 0;
-	TA1CCTL1 = OUTMOD_5;
-	TA1CCTL2 = OUTMOD_5;
-
-}
-
-void moveRight() {
-	P2DIR |= BIT0;
-	P2OUT &= ~BIT0;
-	P2DIR |= BIT3;
-	P2OUT |= BIT3;
-	TA1CCR1 = 50;
-	TA1CCR2 = 50;
-	TA1CCTL1 = OUTMOD_7;
-	TA1CCTL2 = OUTMOD_5;
-	_delay_cycles(900000);
-	P2DIR |= BIT0;
-	P2OUT |= BIT0;
-	P2DIR |= BIT3;
-	P2OUT |= BIT3;
-	TA1CCR1 = 0;
-	TA1CCR2 = 0;
-	TA1CCTL1 = OUTMOD_5;
-	TA1CCTL2 = OUTMOD_5;
-
-}
-
-void moveLeft() {
-	P2DIR |= BIT0;
-	P2OUT |= BIT0;
-	P2DIR |= BIT3;
-	P2OUT &= ~BIT3;
-	TA1CCR1 = 50;
-	TA1CCR2 = 50;
-	TA1CCTL1 = OUTMOD_5;
-	TA1CCTL2 = OUTMOD_7;
-	_delay_cycles(900000);
-	P2DIR |= BIT0;
-	P2OUT |= BIT0;
-	P2DIR |= BIT3;
-	P2OUT |= BIT3;
-	TA1CCR1 = 0;
-	TA1CCR2 = 0;
-	TA1CCTL1 = OUTMOD_5;
-	TA1CCTL2 = OUTMOD_5;
-}
-
-void autocorrectRight() {
-	stopMovingForward();
-	_delay_cycles(10000);
-	moveSmallRight();
-	moveForward();
-	_delay_cycles(100000);
-//	moveSmallLeft();
-//	_delay_cycles(10000);
-}
-
-void autocorrectLeft() {
-	stopMovingForward();
-	_delay_cycles(10000);
-	moveSmallLeft();
-	moveForward();
-	_delay_cycles(100000);
-//	moveSmallRight();
-//	_delay_cycles(10000);
-}
-
