@@ -60,6 +60,7 @@ __interrupt void timerOverflow (void);
 #define		CH_L  	0x00FF48B7
 #define		SEL	 0x00FF708F
 
+// Lab 7 and 8 threshold values for IR sensors
 #define		RIGHT_MAX	0x0210
 #define		RIGHT_MIN	0x0290
 #define		LEFT_MIN	0x0210
@@ -67,6 +68,7 @@ __interrupt void timerOverflow (void);
 #define		FRONT_MIN	0x0210
 #define		FRONT_MAX	0x0250
 
+// Lab 7 and 8 methods
 void	stopMovingForward(void);
 void	stopMovingBackward(void);
 void	moveForward(void);
