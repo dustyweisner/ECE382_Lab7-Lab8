@@ -106,6 +106,34 @@ Then I considered how I would set up the ADC10 subsystem (Analog-to-digital Conv
 
 After that, I included inside the main loop the pseudocode from above that turned on the lights. 
 
+__B Functionality__  
+I created a standalone library called mainimp.c, short for main implementation file. It contained all of the ATD code needed for the maze lab.
+
+__A Functionality__  
+I also  fully characterized the sensors for my robot. I first created a table and graphical plot that showed the ATD values for a variety of distances from a maze wall for the right sensor.
+
+SENSORS AND MEASURMENTS (INCES/HEX)  
+
+|INCHES|LEFT|CENTER|RIGHT|
+|:--|:--:|:--:|:--:|
+|12|206|212|242|
+|11|212|221|244|
+|10|21E|230|24E|
+|9|21F|23A|249|
+|8|21C|23F|25D|
+|7|220|245|262|
+|6|216|242|264|
+|5|21D|249|265|
+|4|22C|25F|26C|
+|3|23B|27E|27B|
+|2|240|2BE|299|
+|1|276|303|29E|
+|0|2BC|320|2DA|
+
+I will use these values to determine how the IR sensors work so I can properly use them to solve the maze. First I will see where the hex values begin to flatten out. I will only use values within a range of values that are reliable. 
+
+
+
 __*Lab 8 "Robot Maze"*__
 
 INSTRUCTIONS  
