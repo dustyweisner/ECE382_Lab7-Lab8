@@ -130,8 +130,11 @@ SENSORS AND MEASURMENTS (INCES/HEX)
 |1|276|303|29E|
 |0|2BC|320|2DA|
 
-I will use these values to determine how the IR sensors work so I can properly use them to solve the maze. First I will see where the hex values begin to flatten out. I will only use values within a range of values that are reliable. 
+The following graph is a characterization of all three sensors:
 
+![](https://github.com/dustyweisner/ECE382_Lab7-Lab8/blob/master/Images/SensorCharacterization.GIF?raw=true)
+
+I will use these values to determine how the IR sensors work so I can properly use them to solve the maze. First I will see where the values begin to spike. The values when the robot is getting farther away begin to flatten out. This means that the noise makes the values unreliable. I should only use values that are about greater than 2 inches as to not hit the wall, and values before the distance where the values begin to flatten out as to not have noise.  I will only use values within the range of values that are reliable. 
 
 
 __*Lab 8 "Robot Maze"*__
